@@ -7,13 +7,7 @@ import glob
 
 file_names = []
 for i in glob.glob("data/**/*.csv", recursive=True):
-    # file_names.append(os.path.basename(i))
     file_names.append(i)
-
-# JAVA_HOME = "/Users/KB/.jdks/corretto-1.8.0_382"
-# os.environ["JAVA_HOME"] = JAVA_HOME
-# spark = SparkSession.builder.appName("Exercise6").enableHiveSupport().getOrCreate()
-# df = spark.read.csv(file_names[0], header=True)
 
 def table_from_csv():
     duckdb.sql("CREATE TABLE IF NOT EXISTS Vehicles (VIN_1_to_10 STRING, "
@@ -65,13 +59,11 @@ def num_of_cars_per_year_to_parquet():
     duckdb.sql("COPY (SELECT Model_Year, count(Make) AS Cars_per_year "
                "FROM Vehicles WHERE Electric_Vehicle_Type = 'Battery Electric Vehicle (BEV)'"
                "GROUP BY Model_Year "
-               "ORDER BY count(Make) DESC) TO 'num_of_cars_per_year' (FORMAT PARQUET, "
+               "ORDER BY count(Make) DESC) "
+               "TO 'num_of_cars_per_year' (FORMAT PARQUET, "
                "PARTITION_BY (Model_Year), OVERWRITE_OR_IGNORE)")
 
-
-
 def main():
-
     table_from_csv()
 
     # console output
